@@ -1,0 +1,10 @@
+<%= form_for(@orderElement, remote: true) do |f| %>
+  
+  <div class="form-group">
+    <%= f.label :amount, "Amount" %>
+    <%= f.number_field :amount, placeholder: "Enter amount", class: 'form-control'  %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Save changes", class: "btn btn-primary btn-block" %>
+  </div>
+<% end %>

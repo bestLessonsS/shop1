@@ -1,0 +1,7 @@
+<% if @unavailableProducts %>
+	<% @unavailableProducts.each do |product| %>
+		$('#order-<%= product[0] %>-product-<%= product[1] %>').addClass('danger')
+	<% end %>
+<% else %>
+	$('.current-order-table tr').removeClass('danger')
+<% end %>

@@ -1,0 +1,146 @@
+<div class="container">
+	<div class="row">
+		<h1 class="col-md-12"><%= @customer.name+" "+@customer.surname %></h1>
+		<div class="col-md-4">
+			<table class="table table-bordered">
+				<tr>
+					<td>Street</td>
+					<td class="text-primary"><%= @customer.street %></td>
+				</tr>
+				<tr>
+					<td>City</td>
+					<td class="text-primary"><%= @customer.city %></td>
+				</tr>
+				<tr>
+					<td>Coutnry</td>
+					<td class="text-primary"><%= @customer.country %></td>
+				</tr>
+				<tr>
+					<td>ZIP code</td>
+					<td class="text-primary"><%= @customer.zip_code %></td>
+				</tr>
+				<tr>
+					<td>
+						<%= link_to "Edit", edit_customer_path(@customer), class: 'btn btn-primary btn-block' %>
+					</td>
+					<td>
+						<%= link_to "Delete", @customer, method: :delete, data: { confirm: "Delete customer?" }, class: 'btn btn-danger btn-block' %>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="col-xs-12 col-sm-12 col-md-9">
+		  <!-- Nav tabs -->
+		  <ul id="order-tabs" class="nav nav-tabs" role="tablist">
+		    <li role="presentation" class="active">
+		    	<a href="#current_order" aria-controls="current_order" role="tab" data-toggle="tab">Current order</a>
+		    </li>
+		    <li role="presentation">
+		    	<a href="#past_order" aria-controls="past_order" role="tab" data-toggle="tab">Past orders</a>
+		   	</li>
+		  </ul>
+		  <!-- Tab panes -->
+			  <div class="tab-content orders-tabs-content">
+			    <div role="tabpanel" class="tab-pane active" id="current_order">
+			    	<% if @currentOrderElements %>
+		    			<div class="panel panel-primary">
+		    				<div class="panel-heading">Current order </div>
+		    				<div class="panel-body">
+		    					<table class="table current-order-table">
+		    						<thead>
+		    							<tr>
+		    								<th>Name</th>
+		    								<th>Amount</th>
+		    								<th>Price</th>
+		    								<th>Total price</th>
+		    								<th></th>
+		    								<th></th>
+		    							</tr>
+		    						</thead>
+		    						<tbody>
+		    							<% @currentOrderElements.each do |elem| %>
+												<tr id="order-<%= elem.order.id %>-product-<%= elem.product.id %>">
+													<td><%= elem.product.name %></td>
+													<td class="amount"><%= elem.amount %></td>
+													<td><%= elem.product.price %></td>
+													<td class="price"><%= elem.amount*elem.product.price %></td>
+													<td><%= link_to "Change", edit_order_element_path(elem), class: "btn btn-default", remote: true, data: {toggle: "modal", target: "#modal-change-order-amount"} %></td>
+													<td><%= link_to "Delete", elem, method: "delete", remote: true, data: {confirm: "Delete product from order?", product_id: elem.product.id}  , class: "btn btn-danger delete-element-from-order" %></td>
+												</tr>
+		    							<% end %>
+		    							<tr>
+		    								<td colspan="3"><strong class="text-primary">Total order price:</strong> </td>
+		    								<td colspan="1"><strong class="total-order-price"><%= @currentOrderSum %></strong></td>
+		    								<td colspan="2">
+		    									
+		    									<%= form_tag({controller: 'customers', action: 'show'}, {remote: true, method: 'get', class: 'show_unavailable_products_form'}) do %>
+		    										<label class="checkbox-inline">
+															<%= check_box_tag 'unavailable', 'unavailable', params[:unavailable] ? true : false %> Show unavailable products
+														</label>
+													<% end %>
+		    								</td>
+		    							</tr>
+		    							<tr>
+		    								<td colspan="6" class="text-left">
+		    									<%= form_for @currentOrder do |f| %>
+														<% f.hidden_field :status, value: "shipped" %>
+														<% f.submit "Submit order", class: "btn btn-primary" %> 
+		    									<% end %>
+		    								</td>
+		    							</tr>
+		    						</tbody>
+		    					</table>
+
+		    				</div>
+		    			</div>
+		    		<% end %>
+			    </div>
+			    <div role="tabpanel" class="tab-pane" id="past_order">
+			    	<% if @customerOrders %>
+			    		<% @customerOrders.each do |order| %>
+					    	<div class="panel panel-default">
+					    		<div class="panel-heading">Order <%= order.id %></div>
+			    				<div class="panel-body">
+			    					<table class="table">
+			    						<thead>
+			    							<tr>
+			    								<th>Name</th>
+			    								<th>Amount</th>
+			    								<th>Price</th>
+			    								<th>Total price</th>
+			    							</tr>
+			    						</thead>
+			    						<tbody>
+			    							<% OrderElement.where(order_id: order.id).each do |elem| %>
+													<tr id="order-<%= elem.order.id %>-product-<%= elem.product.id %>">
+														<td><%= elem.product.name %></td>
+														<td class="amount"><%= elem.amount %></td>
+														<td><%= elem.product.price %></td>
+														<td class="price"><%= elem.amount*elem.product.price %></td>
+													</tr>
+			    							<% end %>
+			    							<tr>
+			    								<td colspan="3"><strong class="text-primary">Total order price:</strong> </td>
+			    								<td colspan="1"><strong class="total-order-price"><%= OrdersController.calculateTotal(order) %></strong></td>
+			    							</tr>
+			    						</tbody>
+			    					</table>
+
+			    				</div>
+					    	</div>
+					    <% end %>
+				    <% end %>
+			    </div>
+			  </div>
+			
+		</div>
+
+
+		<div class="col-xs-12">
+			<%= link_to "Return to customers", customers_path, class: 'btn btn-default return-link' %>
+		</div>
+	</div>
+</div>
+
+<%= render "change_order_amount" %>

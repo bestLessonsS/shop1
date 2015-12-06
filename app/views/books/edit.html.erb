@@ -1,0 +1,32 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<h1 class="col-md-12">Edit book</h1>
+				<%= form_for @product, html: {class: "col-md-6"} do |f| %>
+					<div class="form-group">
+						<label for="productName">Name</label>
+						<%= f.text_field :name, placeholder: "Enter product name", id: 'productName', class: 'form-control' %>
+					</div>
+					<div class="form-group">
+						<label for="productPrice">Price</label>
+						<%= f.text_field :price, placeholder: "Enter product price", id: "productPrice", class: "form-control" %>
+					</div>
+					<div class="form-group">
+						<label for="productAuthor">Author</label>
+						<%= f.text_field :author, placeholder: "Enter author", id: "productAuthor", class: "form-control" %>
+					</div>
+					<div class="form-group">
+						<label for="productAvailable">Amount available</label>
+						<%= f.text_field :amountAvailable, placeholder: "Enter available amount", id: "productAvailable", class: "form-control" %>
+					</div>
+					<%= f.submit "Save changes", class: "btn btn-primary btn-block" %>
+				<% end %>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+				<%= link_to "Return to all products", products_path, class: 'btn btn-default return-link' %>
+			</div>
+	</div>
+</div>

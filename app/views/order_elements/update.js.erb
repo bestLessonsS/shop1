@@ -1,0 +1,16 @@
+var elem = $('#order-<%= @orderElement.order.id %>-product-<%= @orderElement.product.id %>');
+elem.find('.amount').html("<%= @orderElement.amount %>")
+elem.find('.price').html("<%= @elementSum %>")
+elem.parents('.table').find('.total-order-price').html('<%= @orderSum %>')
+
+
+var appendMessage = "<div style='margin-top: 10px;' class='alert alert-success' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Changes saved!</div>";
+
+if($('#modal-change-order-amount .modal-body .alert').size()){
+	$('#modal-change-order-amount .modal-body .alert').fadeOut('300', function() {
+		$(this).remove();
+		$('#modal-change-order-amount .modal-body').append(appendMessage);
+	});
+}else{
+	$('#modal-change-order-amount .modal-body').append(appendMessage);
+}

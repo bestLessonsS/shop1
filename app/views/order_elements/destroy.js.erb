@@ -1,0 +1,7 @@
+$('#order-<%= @orderElement.order.id %>-product-<%= @orderElement.product.id %>').fadeOut(400, function(){
+	var table = $(this).parents('.table')
+	var price = parseFloat(table.find('.total-order-price').html())
+	table.find('.total-order-price').html(price-<%= @elementCost %>)
+	$(this).remove();
+
+})

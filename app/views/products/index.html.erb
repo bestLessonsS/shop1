@@ -1,0 +1,45 @@
+<div class="container">
+	<div class="row">
+		<h1>Products</h1>
+		<div class="products-wrapper">
+			<% @products.each do |product| %>
+				<div class="col-sm-4 col-md-3">
+					<div class="thumbnail">
+						<div class="caption">
+							<h4><%= product.name %></h4>
+							<p class="price">Price: <strong><%= product.price %></strong></p>
+							<span class="available">Amount available: <strong><%= product.amountAvailable %></strong></span>
+						</div>
+						<div class="add-to-cart-wrp">
+							<div>
+								<select class="form-control" style="margin-bottom: 5px;">
+									<option selected value="">Choose customer</option>
+									<% @customers.each do |customer| %>
+										<option value="<%= customer.id %>"><%= customer.name+" "+customer.surname %></option>
+									<% end %>
+								</select>
+							</div>
+							<div>
+								<div class="input-group">
+									<span class="input-group-btn">
+										<%= link_to add_to_cart_orders_path, class: "btn btn-primary add-to-cart-btn", data: { product_id: product.id } do %>
+											Add to cart <i class="glyphicon glyphicon-shopping-cart"></i>
+										<% end %>
+									</span>
+									<input type="text" class="form-control" placeholder="How many?">
+								</div>
+							</div>
+						</div>
+						<div >
+							<%= link_to 'View product', product, class: 'btn btn-default btn-block' %>
+							<%= link_to 'Edit product', product.type == "Book" ? edit_book_path(product) : edit_movie_path(product), class: 'btn btn-default btn-block' %>
+							<%= link_to 'Delete product', product, method: :delete, data: { confirm: "Delete "+product.name+"?" }, class: 'btn btn-danger delete-product-btn btn-block' %>
+						</div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+</div>
+
+<%= render "product_add_to_cart" %>
